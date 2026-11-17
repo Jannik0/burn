@@ -249,6 +249,9 @@ pub mod nn {
 
 pub use burn_std::config::{BurnConfig, config as runtime_config};
 
+mod matmul_precision;
+pub use matmul_precision::*;
+
 #[cfg(all(test, feature = "capture"))]
 mod capture_tests {
     use crate::{module::Module, nn::BatchNormConfig, tensor::Device};

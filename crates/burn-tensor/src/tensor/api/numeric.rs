@@ -844,6 +844,13 @@ where
     /// Shapes of the form `[..., B, 1, K] @ [..., 1, K, N]` are reinterpreted as
     /// `[..., 1, B, K] @ [..., 1, K, N]`, turning a batched vec-mat into a general
     /// matmul, which is often faster.
+    ///
+    /// # Precision
+    ///
+    /// On CubeCL backends, `f32` operands may be rounded to TF32 (10 mantissa bits) on devices
+    /// that accelerate it, such as NVIDIA GPUs from Ampere on. Each operand then carries a relative
+    /// rounding error of up to `2^-11` (about `4.9e-4`) instead of `2^-24`. Call `burn::set_float32_matmul_precision(Float32MatmulPrecision::Highest)` at
+    /// startup, or set `[cubek.matmul] allow_tf32 = false` in `burn.toml`, to keep them in `f32`.
     pub fn matmul(self, other: Self) -> Self {
         check!(TensorCheck::matmul(&self, &other));
 

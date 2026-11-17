@@ -72,6 +72,22 @@ At each directory level, CubeK checks `cubek.toml` and `CubeK.toml` before `[cub
 or `Burn.toml`, then searches parent directories. Files are not merged. Standalone CubeK files use
 `[matmul]` without the `cubek.` prefix.
 
+To choose the precision in code, call `burn::set_float32_matmul_precision` at startup, before the
+first tensor operation. Its levels follow PyTorch's `torch.set_float32_matmul_precision`:
+
+```rust, ignore
+use burn::{Float32MatmulPrecision, set_float32_matmul_precision};
+
+// Keep F32 operands in F32, like `allow_tf32 = false`.
+set_float32_matmul_precision(Float32MatmulPrecision::Highest)
+    .expect("called before the first matmul");
+```
+
+`Float32MatmulPrecision::High` allows TF32 and is the default. The level replaces `allow_tf32` from
+the file and keeps the file's other settings. The precision is fixed once kernels have read it, so a
+later call with another level returns an error; `burn::float32_matmul_precision` returns the level
+in effect. Convolution doesn't follow this setting and may still use TF32.
+
 ### CubeCL
 
 The `[cubecl]` section configures the CubeCL runtime. You can use the options from the

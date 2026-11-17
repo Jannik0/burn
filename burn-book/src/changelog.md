@@ -301,6 +301,10 @@ Matrix multiplication precision is now configurable through `[cubek.matmul].allo
 allow_tf32 = false
 ```
 
+To choose it in code, call `burn::set_float32_matmul_precision(Float32MatmulPrecision::Highest)`
+at startup; `High` keeps the TF32 default. `burn::float32_matmul_precision` returns the level in
+effect.
+
 See [runtime configuration](./advanced/runtime-configuration.md#cubek-matmul-precision) for details.
 
 #### NdArray and LibTorch backend removal

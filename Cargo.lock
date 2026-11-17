@@ -956,6 +956,7 @@ dependencies = [
  "burn-train",
  "burn-vision",
  "cubecl",
+ "cubek",
 ]
 
 [[package]]
